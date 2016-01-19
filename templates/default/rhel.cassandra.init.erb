@@ -105,22 +105,8 @@ service_start() {
 service_stop() {
   service_stop_pre_check
 
-  echo "executing nodetool disablethrift .."
-  $NODETOOL -h <%=node.ipaddress%> disablethrift
-  [ $? -eq 0 ] || {
-    echo "failed to execute disablethrift .."
-  }
-  sleep 3
-
-  echo "executing nodetool disablegossip .."
-  $NODETOOL -h <%=node.ipaddress%> disablegossip 
-  [ $? -eq 0 ] || {
-    echo "failed to execute disablegossip .."
-  }
-  sleep 3
-
   echo "executing nodetool drain .."
-  $NODETOOL -h <%=node.ipaddress%> drain
+  $NODETOOL drain
   [ $? -eq 0 ] || {
     echo "failed to execute drain .."
   }
