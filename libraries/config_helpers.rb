@@ -49,12 +49,12 @@ def hash_to_yaml_string(hash)
   hash.to_hash.to_yaml
 end
 
-def discover_seed_nodes
+def discover_seed_nodes(aws_node)
   # use chef search for seed nodes
   if node['cassandra']['seed_discovery']['use_chef_search']
     if Chef::Config[:solo]
       Chef::Log.warn("Chef Solo does not support search, provide the seed nodes via node attribute node['cassandra']['seeds']")
-      node['ipaddress']
+      aws_node['public_ip']
     else
       Chef::Log.info('Cassandra seed discovery using Chef search is enabled')
       q = node['cassandra']['seed_discovery']['search_query'] ||
@@ -62,11 +62,11 @@ def discover_seed_nodes
           "AND role:#{node['cassandra']['seed_discovery']['search_role']} "\
           "AND cassandra_config_cluster_name:#{node['cassandra']['config']['cluster_name']}"
       Chef::Log.info("Will discover Cassandra seeds using query '#{q}'")
-      xs = search(:node, q).map(&:ipaddress).sort.uniq
+      xs = search("aws_opsworks_instance", q).map { |a| a['public_ip'] }.sort.uniq
       Chef::Log.debug("Discovered #{xs.size} Cassandra seeds using query '#{q}'")
 
       if xs.empty?
-        node['ipaddress']
+        aws_node['public_ip']
       else
         xs.take(node['cassandra']['seed_discovery']['count']).join(',')
       end

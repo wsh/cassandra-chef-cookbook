@@ -19,8 +19,9 @@
 
 fail "attribute node['cassandra']['config']['cluster_name'] not defined" unless node['cassandra']['config']['cluster_name']
 
+aws_node = search("aws_opsworks_instance", "self:true").first
 # discover cluster nodes via chef search
-node.default['cassandra']['seeds'] = discover_seed_nodes
+node.default['cassandra']['seeds'] = discover_seed_nodes(aws_node)
 
 # setup java
 include_recipe 'java' if node['cassandra']['install_java']

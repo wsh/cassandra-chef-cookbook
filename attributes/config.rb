@@ -25,8 +25,6 @@ default['cassandra']['config']['concurrent_reads'] = 32 # suggested at 16 * numb
 default['cassandra']['config']['concurrent_writes'] = 32 # suggested at 8 * number of cpu cores
 default['cassandra']['config']['trickle_fsync'] = false
 default['cassandra']['config']['trickle_fsync_interval_in_kb'] = 10_240
-default['cassandra']['config']['listen_address'] = node['ipaddress']
-default['cassandra']['config']['broadcast_address'] = node['ipaddress']
 default['cassandra']['config']['rpc_address'] = '0.0.0.0'
 default['cassandra']['config']['rpc_port'] = '9160'
 default['cassandra']['config']['storage_port'] = 7000
@@ -77,7 +75,6 @@ default['cassandra']['config']['inter_dc_tcp_nodelay'] = true
 
 # C* 2.1.0
 if node['cassandra']['version'] >= '2.1'
-  default['cassandra']['config']['broadcast_rpc_address'] = node['ipaddress']
   default['cassandra']['config']['tombstone_failure_threshold'] = 100_000
   default['cassandra']['config']['tombstone_warn_threshold'] = 1000
   default['cassandra']['config']['sstable_preemptive_open_interval_in_mb'] = 50

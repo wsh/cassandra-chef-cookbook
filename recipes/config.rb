@@ -18,16 +18,21 @@
 #
 
 # TODO: update referenced attributes for config
+aws_node = search("aws_opsworks_instance", "self:true").first
+node.default['cassandra']['config']['listen_address'] = aws_node['private_ip']
+node.default['cassandra']['config']['broadcast_address'] = aws_node['public_ip']
+node.default['cassandra']['config']['broadcast_rpc_address'] = aws_node['public_ip']
+
 node.default['cassandra']['config']['data_file_directories'] = node['cassandra']['data_dir']
 node.default['cassandra']['config']['saved_caches_directory'] = node['cassandra']['saved_caches_dir']
 node.default['cassandra']['config']['commitlog_directory'] = node['cassandra']['commitlog_dir']
 
-node.default['cassandra']['seeds'] = discover_seed_nodes
+node.default['cassandra']['seeds'] = discover_seed_nodes(aws_node)
 
 node.default['cassandra']['config']['seed_provider'] = [{
   'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
   'parameters' => [
-    'seeds' => discover_seed_nodes
+    'seeds' => discover_seed_nodes(aws_node)
   ]
 }]
 
