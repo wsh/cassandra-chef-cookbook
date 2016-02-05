@@ -7,6 +7,8 @@
 # description: <%=node.cassandra.service_name%> daemon
 # processname: <%=node.cassandra.service_name%>
 
+chrt --batch --pid 0 $$
+
 export CASSANDRA_HOME=<%=node.cassandra.installation_dir%>
 export CASSANDRA_CONF=<%=node.cassandra.conf_dir%>
 NODETOOL=$CASSANDRA_HOME/bin/nodetool

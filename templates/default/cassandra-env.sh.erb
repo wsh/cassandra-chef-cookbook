@@ -226,15 +226,6 @@ JVM_OPTS="$JVM_OPTS -Xmx<%= node['cassandra']['jvm']['xmx'] %>"
 JVM_OPTS="$JVM_OPTS -Xmx${MAX_HEAP_SIZE}"
 <% end -%>
 
-# -Xmn
-<% if node['cassandra']['jvm'] && node['cassandra']['jvm']['xmn'] -%>
-# (set via node['cassandra']['jvm']['xmn'])
-JVM_OPTS="$JVM_OPTS -Xmn<%= node['cassandra']['jvm']['xmn'] %>"
-<% else -%>
-# (set via node['cassandra']['heap_new_size'])
-JVM_OPTS="$JVM_OPTS -Xmn${HEAP_NEWSIZE}"
-<% end -%>
-
 <% if node['cassandra']['heap_dump'] -%>
 JVM_OPTS="$JVM_OPTS -XX:+HeapDumpOnOutOfMemoryError"
 <% end -%>
@@ -370,6 +361,8 @@ JVM_OPTS="$JVM_OPTS -XX:GCLogFileSize=10M"
 # JVM_OPTS="$JVM_OPTS -XX:GCLogFileSize=10M"
 <% end -%>
 
+
+
 # note: bash evals '1.7.x' as > '1.7' so this is really a >= 1.7 jvm check
 JVM_VERSION_SHORT=$(printf "%.3s" $JVM_VERSION)
 if [ "$JVM_VERSION_SHORT" = "1.7" ] && [ "$JVM_ARCH" = "64-Bit" ] ; then
@@ -417,5 +410,5 @@ JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.ssl=false"
 JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
 <% end %>
 # see https://issues.apache.org/jira/browse/CASSANDRA-6541
-JVM_OPTS="$JVM_OPTS -XX:+CMSClassUnloadingEnabled"
+JVM_OPTS="$JVM_OPTS -XX:+CMSClassUnloadingEnabled -XX:+UseNUMA -XX:InitiatingHeapOccupancyPercent=25 -XX:G1RSetUpdatingPauseTimePercent=5"
 JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS"
