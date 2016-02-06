@@ -8,6 +8,7 @@
 # processname: <%=node.cassandra.service_name%>
 
 chrt --batch --pid 0 $$
+taskset -apc 1-7 $$
 
 export CASSANDRA_HOME=<%=node.cassandra.installation_dir%>
 export CASSANDRA_CONF=<%=node.cassandra.conf_dir%>

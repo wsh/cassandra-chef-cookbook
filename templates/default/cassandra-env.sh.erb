@@ -410,5 +410,5 @@ JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.ssl=false"
 JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
 <% end %>
 # see https://issues.apache.org/jira/browse/CASSANDRA-6541
-JVM_OPTS="$JVM_OPTS -XX:+CMSClassUnloadingEnabled -XX:+UseNUMA -XX:InitiatingHeapOccupancyPercent=25 -XX:G1RSetUpdatingPauseTimePercent=5"
+JVM_OPTS="$JVM_OPTS -XX:+CMSClassUnloadingEnabled -XX:+UseNUMA -XX:InitiatingHeapOccupancyPercent=25 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:+ParallelRefProcEnabled -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Xloggc:/var/log/cassandra/gc.log"
 JVM_OPTS="$JVM_OPTS $JVM_EXTRA_OPTS"
